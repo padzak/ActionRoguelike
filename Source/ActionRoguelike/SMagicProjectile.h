@@ -4,6 +4,10 @@
 #include "GameFramework/Actor.h"
 #include "SMagicProjectile.generated.h"
 
+class UProjectileMovementComponent;
+class UProjectile;
+class USphereComponent;
+
 UCLASS()
 class ACTIONROGUELIKE_API ASMagicProjectile : public AActor
 {
