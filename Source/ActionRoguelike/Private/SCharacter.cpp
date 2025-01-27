@@ -3,10 +3,10 @@
 
 #include "DrawDebugHelpers.h"
 
-
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "SInteractionComponent.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -22,6 +22,8 @@ SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent"
 
     CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComp->SetupAttachment(SpringArmComp);
+
+	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComponent");
 
     // Prevent character rotation from affecting the camera
     bUseControllerRotationPitch = false;
@@ -72,8 +74,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("Turn",			this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp",		this, &APawn::AddControllerPitchInput);
 
-	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
-	PlayerInputComponent->BindAction("Jump",		  IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("PrimaryAttack",	IE_Pressed, this, &ASCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("Jump",			IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("PrimaryInteract",	IE_Pressed, this, &ASCharacter::PrimaryInteract);
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -106,7 +109,10 @@ void ASCharacter::PrimaryAttack()
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-
-
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+}
+
+void ASCharacter::PrimaryInteract()
+{
+	InteractionComp->PrimaryInteract();
 }
