@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "SInteractionComponent.h"
+#include "Animation/AnimMontage.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -101,11 +102,22 @@ void ASCharacter::MoveRight(float Value)
 
 void ASCharacter::PrimaryAttack()
 {
+	PlayAnimMontage(AttackAnim);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, 0.2f);
+
+	// NOTE: f.e. call in the case of the character death while executing the attack
+	// GetWorldTimerManager().ClearTimer(TimerHandle_PrimaryAttack);
+
+}
+
+void ASCharacter::PrimaryAttack_TimeElapsed()
+{
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 
 	// SpawnTM - Spawn Transform Matrix
 	FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
-	
+
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
