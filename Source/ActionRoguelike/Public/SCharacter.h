@@ -21,7 +21,7 @@ protected:
 	TSubclassOf<AActor> ProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
-	UAnimMontage* AttackAnim;
+	TObjectPtr<UAnimMontage> AttackAnim;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 
@@ -32,13 +32,13 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere);
-	USpringArmComponent* SpringArmComp;
+	TObjectPtr<USpringArmComponent> SpringArmComp;
 	
 	UPROPERTY(VisibleAnywhere);
-	UCameraComponent* CameraComp;
+	TObjectPtr<UCameraComponent> CameraComp;
 
 	UPROPERTY(VisibleAnywhere)
-	USInteractionComponent* InteractionComp;
+	TObjectPtr<USInteractionComponent> InteractionComp;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

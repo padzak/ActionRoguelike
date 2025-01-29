@@ -20,13 +20,13 @@ public:
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	USphereComponent* SphereComp;
+	TObjectPtr<USphereComponent> SphereComp;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UProjectileMovementComponent* MovementComp;
+	TObjectPtr<UProjectileMovementComponent> MovementComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UParticleSystemComponent* EffectComp;
+	TObjectPtr<UParticleSystemComponent> EffectComp;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
