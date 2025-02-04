@@ -41,7 +41,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USInteractionComponent> InteractionComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	TObjectPtr<USAttributeComponent> AttributeComp;
 
 	// Called when the game starts or when spawned
