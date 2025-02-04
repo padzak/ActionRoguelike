@@ -1,4 +1,7 @@
 #include "SExplosiveBarrel.h"
+
+#include <SAttributeComponent.h>
+
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
@@ -51,4 +54,9 @@ void ASExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent,
 	FString CombinedString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
 	DrawDebugString(GetWorld(), Hit.ImpactPoint, *CombinedString, nullptr, FColor::White, 2.0f, true);
 
+	USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
+	if (AttributeComp)
+	{
+		AttributeComp->ApplyHealthChange(-50.0f);
+	}
 }
