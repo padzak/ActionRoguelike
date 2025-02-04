@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "SInteractionComponent.h"
 #include "Animation/AnimMontage.h"
+#include "SAttributeComponent.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -25,6 +26,8 @@ SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent"
     CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComponent");
+
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComponent");
 
     // Prevent character rotation from affecting the camera
     bUseControllerRotationPitch = false;
