@@ -53,6 +53,10 @@ protected:
 	void PrimaryAttack_TimeElapsed();
 	void PrimaryInteract();
 
+	// Attack
+	float TraceRange;
+	void CalculateImpactPoint(FVector& TraceEnd) const;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

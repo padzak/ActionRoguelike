@@ -9,6 +9,7 @@
 #include "SInteractionComponent.h"
 #include "Animation/AnimMontage.h"
 #include "SAttributeComponent.h"
+#include <Kismet/KismetMathLibrary.h>
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -16,7 +17,7 @@ ASCharacter::ASCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
     SpringArmComp->SetupAttachment(RootComponent);
 
     // Enable the spring arm to use the controller rotation
@@ -36,6 +37,8 @@ SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent"
 
     // Allow the character to orient based on movement
     GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	TraceRange = 1000.0f;
 }
 
 // Called when the game starts or when spawned
@@ -118,10 +121,14 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	if (ensure(ProjectileClass))
 	{
-		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-
 		// SpawnTM - Spawn Transform Matrix
-		FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
+		FVector ImpactPoint;
+		CalculateImpactPoint(ImpactPoint);
+
+		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+		FRotator SpawnRotation = UKismetMathLibrary::FindLookAtRotation(HandLocation, ImpactPoint);
+
+		FTransform SpawnTM(SpawnRotation, HandLocation);
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -134,3 +141,21 @@ void ASCharacter::PrimaryInteract()
 {
 	InteractionComp->PrimaryInteract();
 }
+
+void ASCharacter::CalculateImpactPoint(FVector& TraceEnd) const
+{
+    FVector CameraLocation = CameraComp->GetComponentLocation();
+    TraceEnd = CameraLocation + CameraComp->GetForwardVector() * TraceRange;
+
+    FHitResult HitResult;
+    FCollisionQueryParams CollisionQueryParams;
+    GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, TraceEnd, ECC_Visibility, CollisionQueryParams);
+
+    //DrawDebugLine(GetWorld(), CameraLocation, HitResult.ImpactPoint, FColor::Red, false, 5.0f, 0, 5.0f);
+
+    if (HitResult.bBlockingHit)
+    {
+		TraceEnd = HitResult.ImpactPoint;
+    }
+}
+
