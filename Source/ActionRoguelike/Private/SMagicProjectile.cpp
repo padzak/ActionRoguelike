@@ -45,6 +45,17 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComp,
 ;	}
 }
 
+void ASMagicProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	Explode();
+}
+
+// _Implementation from it being marked as BlueprintNativeEvent
+void ASMagicProjectile::Explode_Implementation()
+{
+	Destroy();
+}
+
 // Called when the game starts or when spawned
 void ASMagicProjectile::BeginPlay()
 {
