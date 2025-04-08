@@ -35,6 +35,9 @@ protected:
 	UFUNCTION()
 	virtual void OnActorHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	// BlueprintNativeEvent = C++ base implementation, can be expanded in Blueprints
+	// BlueprintCallable to allow child classes to trigger explosions
+	// Not required for assignment, useful for expanding in Blueprint later on
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Explode();
 
