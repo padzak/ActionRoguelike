@@ -70,6 +70,8 @@ protected:
 	void Dash_TimeElapsed();
 	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
 
+	virtual void PostInitializeComponents() override;
+
 	// Attack
 	float TraceRange;
 	void CalculateImpactPoint(FVector& TraceEnd) const;
