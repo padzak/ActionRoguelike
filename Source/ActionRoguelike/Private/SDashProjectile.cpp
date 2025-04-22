@@ -19,7 +19,7 @@ void ASDashProjectile::BeginPlay()
 {
     Super::BeginPlay();
 
-    GetWorldTimerManager().SetTimer(TimerHandle_DelayedDetonate, this, &ASDashProjectile::TeleportInstigation, TeleportDelay, false);
+    GetWorldTimerManager().SetTimer(TimerHandle_DelayedDetonate, this, &ASDashProjectile::Explode, TeleportDelay, false);
 }
 
 void ASDashProjectile::Explode_Implementation()
@@ -41,8 +41,10 @@ void ASDashProjectile::Explode_Implementation()
 void ASDashProjectile::TeleportInstigation()
 {
     AActor* ActorToTeleport = GetInstigator();
-    if (ensure(ActorToTeleport))
-    {
-     ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation(), false, false);
-    }
+
+    check(ActorToTeleport);
+    ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation(), false, false);
+    const APawn* InstigatorPawn = CastChecked<APawn>(ActorToTeleport);
+
+    Destroy();
 }
