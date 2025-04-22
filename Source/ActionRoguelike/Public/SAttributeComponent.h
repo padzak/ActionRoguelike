@@ -34,6 +34,9 @@ protected:
 
 
 public:
+	UFUNCTION(BlueprintCallable, Category="Attributes")
+	bool IsAlive() const { return Health > 0.0f; }
+
 	UPROPERTY(BlueprintAssignable, Category="Attributes")
 	FOnHealthChanged OnHealthChanged;
 
